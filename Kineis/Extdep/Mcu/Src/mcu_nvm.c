@@ -62,6 +62,10 @@ const uint8_t test_device_addr[4] = { 0x11, 0x22, 0x33, 0x44 };
  * Several radio configurations are listed in table below. Uncomment/comment the one you want to
  * use/not use.
  */
+#if defined(KRD_FW_LP) && defined(KNS_MOD_A2_VLD_ONLY)
+#error "KRD_FW_LP default radio configuration below is LDK; select an A2/VLDA4 conf or build with KNS_MODS=ALL"
+#endif
+
 static uint8_t radioConfZone[16] = {
 
 #ifdef KRD_FW_LP

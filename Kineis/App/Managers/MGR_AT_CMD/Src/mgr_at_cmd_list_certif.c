@@ -218,6 +218,7 @@ static bool MGR_AT_CMD_sendRandomTxData(struct KNS_tx_rf_cfg_t *rf_cfg)
 		eop_isr_cb = eoAtMW_isr_cb;
 #endif
 		break;
+#ifndef KNS_MOD_A2_VLD_ONLY
 	case KNS_TX_MOD_LDK:
 		mw_cfg.valid = true;
 		bitstream_bitlen = 270;
@@ -225,6 +226,7 @@ static bool MGR_AT_CMD_sendRandomTxData(struct KNS_tx_rf_cfg_t *rf_cfg)
 		eop_isr_cb = eoAtMW_isr_cb;
 #endif
 		break;
+#endif
 #ifdef USE_HDA4
 	case KNS_TX_MOD_HDA4:
 		mw_cfg.valid = true;
@@ -374,9 +376,11 @@ bool bMGR_AT_CMD_CW_cmd(uint8_t *pu8_cmdParamString, enum atcmd_type_t e_exec_mo
 	case (4):
 		rf_cfg.modulation = KNS_TX_MOD_VLDA4;
 		break;
+#ifndef KNS_MOD_A2_VLD_ONLY
 	case (5):
 		rf_cfg.modulation = KNS_TX_MOD_LDK;
 		break;
+#endif
 #ifdef USE_HDA4
 	case (6):
 		rf_cfg.modulation = KNS_TX_MOD_HDA4;
@@ -398,7 +402,9 @@ bool bMGR_AT_CMD_CW_cmd(uint8_t *pu8_cmdParamString, enum atcmd_type_t e_exec_mo
 	case (2):
 	case (3):
 	case (4):
+#ifndef KNS_MOD_A2_VLD_ONLY
 	case (5):
+#endif
 #ifdef USE_HDA4
 	case (6):
 #endif

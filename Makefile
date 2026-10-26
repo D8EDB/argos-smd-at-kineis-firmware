@@ -37,6 +37,12 @@ APP = GUI
 # Select output port
 COMM = UART
 
+# Uplink formats to support. Can be:
+# * A2_VLD: LDA2, LDA2L (A2 legacy) and VLDA4 only. LDK encoder is wrapped out and discarded
+#           by --gc-sections; LDK paths in the app/AT layer are compiled out.
+# * ALL:    every format libkineis.a supports (LDA2, LDA2L, VLDA4, LDK)
+KNS_MODS = A2_VLD
+
 # Select Kineis stack MAC profile. Can be:
 # * BASIC: basic profile, sending message once immediately 
 # * BLIND: blind profile, sending message several times periodically 
@@ -146,6 +152,7 @@ $(KINEIS_DIR)/App/Managers/MGR_AT_CMD/Src/mgr_at_cmd_list_previpass.c \
 $(KINEIS_DIR)/App/Kineis_os/KNS_Q/Src/kns_q.c \
 $(KINEIS_DIR)/App/Kineis_os/KNS_OS/Src/kns_os.c \
 $(KINEIS_DIR)/App/kns_app.c \
+$(KINEIS_DIR)/App/kns_mod_subset.c \
 $(KINEIS_DIR)/App/Libs/STRUTIL/Src/strutil_lib.c \
 $(KINEIS_DIR)/App/Libs/USERDATA/Src/user_data.c \
 $(KINEIS_DIR)/Lpm/Src/mgr_lpm.c \
@@ -361,6 +368,11 @@ C_DEFS +=  \
 -DUSE_SPI_DRIVER
 endif
 
+ifeq ($(KNS_MODS), A2_VLD)
+C_DEFS +=  \
+-DKNS_MOD_A2_VLD_ONLY
+endif
+
 # compile gcc flags
 ASFLAGS += $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -Wextra -Werror -Wno-unused-but-set-variable -Wno-enum-conversion -Wno-unused-parameter -Wimplicit-fallthrough=1 -Wtype-limits -fdata-sections -Wwrite-strings -ffunction-sections -fstack-usage
 
@@ -384,6 +396,9 @@ LDSCRIPT = STM32WL55XX_FLASH_CM4.ld
 LIBS = -lc -lm -lnosys
 LIBDIR =
 LDFLAGS = $(MCU) -specs=nano.specs -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections -static
+ifeq ($(KNS_MODS), A2_VLD)
+LDFLAGS += -Wl,--wrap=KNS_FF_encodeLDK
+endif
 ifneq ($(DEBUG), 1)
 LDFLAGS += -s
 endif

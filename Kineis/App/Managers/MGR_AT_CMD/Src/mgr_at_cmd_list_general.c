@@ -250,10 +250,12 @@ bool bMGR_AT_CMD_RCONF_cmd(uint8_t *pu8_cmdParamString __attribute__((unused)),
 			strcpy((char*)modulation, "LDA2L");
 		else if (radio_cfg.modulation == KNS_TX_MOD_VLDA4)
 			strcpy((char*)modulation, "VLDA4");
+#ifndef KNS_MOD_A2_VLD_ONLY
 		else if (radio_cfg.modulation == KNS_TX_MOD_HDA4)
 			strcpy((char*)modulation, "HDA4");
 		else if (radio_cfg.modulation == KNS_TX_MOD_LDK)
 			strcpy((char*)modulation, "LDK");
+#endif
 		else
 			strcpy((char*)modulation, "UNKNOWN");
 		MCU_AT_CONSOLE_send("+RCONF=%u,%u,%d,%s\r\n", radio_cfg.min_frequency,

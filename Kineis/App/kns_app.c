@@ -238,9 +238,11 @@ void KNS_APP_stdln_loop(void)
 		case (KNS_TX_MOD_VLDA4):
 			appEvt.data_ctxt.usrdata_bitlen = 24;
 			break;
+#ifndef KNS_MOD_A2_VLD_ONLY
 		case (KNS_TX_MOD_LDK):
 			appEvt.data_ctxt.usrdata_bitlen = 128;
 			break;
+#endif
 		default:
 			kns_assert(0); // wrong modulation flashed into device
 			break;
