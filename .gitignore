@@ -5,3 +5,11 @@ Kineis/doc/html/
 .externalToolBuilders/
 *.log/
 *.bak
+
+# SDR captures live outside the repo (C:\dev\argos-captures)
+captures/
+*.iq
+*.cf32
+*.cs16
+*.cs8
+*.wav
